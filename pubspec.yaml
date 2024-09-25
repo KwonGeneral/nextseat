@@ -1,0 +1,34 @@
+name: nextseat
+description: "같은 와이파이, 다른 이야기"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_easyloading: ^3.0.5 # [MIT] 로딩 패키지
+  get: ^4.6.6  # [MIT] 상태관리 패키지
+  udp: ^5.0.3  # [MIT] UDP 패키지
+  web_socket_channel: ^3.0.0  # [BSD-3-Clause] 웹소켓 패키지
+  logger: ^2.3.0 # [MIT] 로그 패키지
+  dart_ipify: ^1.1.1 # [MIT] 아이피 주소 패키지
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build: ^2.4.1 # [BSD-3-Clause] 빌드 패키지
+  glob: ^2.1.2 # [BSD-3-Clause] 파일 패키지
+  build_runner: ^2.4.9 # [BSD-3-Clause] 빌드 러너 패키지
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
