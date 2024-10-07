@@ -5,6 +5,11 @@ abstract class BaseDataException implements Exception {
 
   @override
   String toString() {
-    return message;
+    return '[데이터 예외] $message';
   }
+}
+
+// MARK: - 기본 데이터 예외 정의
+class DataException extends BaseDataException {
+  DataException(super.message);
 }

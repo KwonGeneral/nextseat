@@ -9,6 +9,7 @@ import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/presenter/lang/LangKeys.dart';
 import 'package:nextseat/presenter/lang/Messages.dart';
 import 'package:nextseat/presenter/widgets/SeatBottomNavigationBar.dart';
+import 'package:nextseat/presenter/widgets/SeatWebViewDialog.dart';
 
 // MARK: - 라우터
 class SeatRouter {
@@ -86,6 +87,39 @@ class SeatRouter {
     return false;
   }
 
+  // MARK: - route를 통해, to를 호출하는 함수
+  static Future<void> routeTo({required String? route, String title = '', bool isForce = false,}) async {
+    if (route == null) {
+      return;
+    }
+
+    if(Get.isDialogOpen == true && DialogUtils.getDialogTag() == DialogUtils.ERROR) {
+      Log.d("[routeTo] 에러 다이얼로그가 열려있습니다. 이동을 제한합니다.");
+      return;
+    }
+
+    // route가 http 또는 https로 시작하는지 체크
+    if (route.startsWith('http') || route.startsWith('https')) {
+      toWebView(url: route, title: title);
+      return;
+    }
+
+    // route예시 => /child_connect_request
+    // route를 통해, Scheme을 가져온다.
+    Scheme? scheme = RouterUtils.getScheme(route);
+    if (scheme == null) {
+      return;
+    }
+
+    // parameter를 가져온다.
+    Uri uri = Uri.parse(route);
+    Map<String, String> parameter = uri.queryParameters;
+
+    Log.d("[PlantyRouter.routeTo] route => $route\nscheme => $scheme\nparameter => $parameter\nisForce => $isForce");
+
+    await SeatRouter.to(scheme: scheme, parameter: parameter, isForce: isForce,);
+  }
+
   // MARK: - 뒤로가기 처리
   static Future<bool> back({bool isAllClear = false}) async {
     //현재 라우트가 마지막인지 체크
@@ -148,6 +182,18 @@ class SeatRouter {
 
     Log.d("[SeatRouter.back] 이전 페이지로 이동합니다. => moveScheme: ${RouterUtils.getCurrentScheme()}");
     return false;
+  }
+
+  // MARK: - 웹뷰
+  static Future<void> toWebView({required String url, String title = '', }) async {
+    if(Get.isDialogOpen == true && DialogUtils.getDialogTag() == DialogUtils.ERROR) {
+      Log.d("[toWebView] 에러 다이얼로그가 열려있습니다. 이동을 제한합니다.");
+      return;
+    }
+    SeatWebViewDialog.showUrl(
+      title: title,
+      url: url,
+    );
   }
 
   static Future _toNamed(String path,

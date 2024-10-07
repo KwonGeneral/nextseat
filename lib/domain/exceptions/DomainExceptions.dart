@@ -5,6 +5,11 @@ abstract class BaseDomainException implements Exception {
 
   @override
   String toString() {
-    return message;
+    return '[도메인 예외] $message';
   }
+}
+
+// MARK: - 기본 데이터 예외 정의
+class DomainException extends BaseDomainException {
+  DomainException(super.message);
 }

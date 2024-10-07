@@ -19,6 +19,13 @@ dependencies:
   dart_ipify: ^1.1.1 # [MIT] 아이피 주소 패키지
   get_it: ^8.0.0 # [MIT] 의존성 주입 패키지
   injectable: ^2.5.0 # [MIT] 의존성 주입 패키지
+  shared_preferences: ^2.3.2 # [BSD-3-Clause] 공유 프리퍼런스 패키지
+  device_info_plus: ^10.1.2 # [BSD-3-Clause] 디바이스 정보 패키지
+  android_id: ^0.4.0 # [BSD-3-Clause] 안드로이드 아이디 패키지
+  url_launcher: ^6.3.0 # [BSD-3-Clause] URL 런처 패키지
+  package_info_plus: ^8.0.2 # [BSD-3-Clause] 패키지 정보 패키지
+  uni_links: ^0.5.1 # [BSD-2-Clause] 딥링크 패키지
+  webview_flutter: ^4.9.0 # [BSD-3-Clause] 웹뷰 패키지
 
 dev_dependencies:
   flutter_test:
@@ -30,6 +37,19 @@ dev_dependencies:
   build_runner: ^2.4.9 # [BSD-3-Clause] 빌드 러너 패키지
 
 flutter:
+  fonts:
+    - family: PretendardBold
+      fonts:
+        - asset: assets/fonts/PretendardBold.otf
+
+    - family: PretendardMedium
+      fonts:
+        - asset: assets/fonts/PretendardMedium.otf
+
+    - family: PretendardRegular
+      fonts:
+        - asset: assets/fonts/PretendardRegular.otf
+
   uses-material-design: true
 
   assets:

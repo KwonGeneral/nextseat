@@ -15,4 +15,13 @@ class LightTheme implements AppThemes {
 
   @override
   Color get surface01 => LightColors.surface01;
+
+  @override
+  Color get black60 => LightColors.black60;
+
+  @override
+  Color get black => LightColors.black;
+
+  @override
+  Color get white => LightColors.white;
 }

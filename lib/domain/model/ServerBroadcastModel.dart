@@ -1,10 +1,12 @@
 
+import 'package:nextseat/domain/model/UserModel.dart';
+
 // MARK: - 서버 브로드캐스트 모델
 class ServerBroadcastModel {
   String id;  // 서버 고유 아이디
   String address;  // 서버 주소
   String name;  // 서버 이름
-  int memberCount;  // 서버 인원
+  List<UserModel> joinUserList;  // 서버에 참여중인 유저
   bool isJoinable;  // 서버 참여 가능 여부
   DateTime timestamp;  // 서버 생성 시간
 
@@ -12,7 +14,7 @@ class ServerBroadcastModel {
     required this.id,
     required this.address,
     required this.name,
-    required this.memberCount,
+    required this.joinUserList,
     required this.isJoinable,
     required this.timestamp,
   });
@@ -22,7 +24,7 @@ class ServerBroadcastModel {
       'id': id,
       'address': address,
       'name': name,
-      'memberCount': memberCount,
+      'joinUserList': joinUserList,
       'isJoinable': isJoinable,
       'timestamp': timestamp,
     };
@@ -32,7 +34,7 @@ class ServerBroadcastModel {
       : id = json['id'],
         address = json['address'],
         name = json['name'],
-        memberCount = json['memberCount'],
+        joinUserList = json['joinUserList'],
         isJoinable = json['isJoinable'],
         timestamp = DateTime.parse(json['timestamp']);
 

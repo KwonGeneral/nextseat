@@ -1,12 +1,14 @@
 
 // MARK: - 채팅방 모델
+import 'package:nextseat/domain/model/UserModel.dart';
+
 class RoomModel {
   String id;  // 채팅방 고유 아이디
   String name;  // 채팅방 이름
   String number;  // 채팅방 번호
   String ownerId;  // 채팅방 소유자 아이디
   String? hostAddress;  // 채팅방 호스트 주소
-  int memberCount;  // 채팅방 인원
+  List<UserModel> joinUserList;  // 채팅방 참여중인 유저
   bool isJoinable;  // 채팅방 참여 가능 여부
   DateTime createdAt;  // 채팅방 생성 시간
   DateTime updatedAt;  // 채팅방 업데이트 시간
@@ -18,7 +20,7 @@ class RoomModel {
     required this.number,
     required this.ownerId,
     required this.hostAddress,
-    required this.memberCount,
+    required this.joinUserList,
     required this.isJoinable,
     required this.createdAt,
     required this.updatedAt,
@@ -32,7 +34,7 @@ class RoomModel {
       'number': number,
       'ownerId': ownerId,
       'hostAddress': hostAddress,
-      'memberCount': memberCount,
+      'joinUserList': joinUserList,
       'isJoinable': isJoinable,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
@@ -46,7 +48,7 @@ class RoomModel {
         number = json['number'],
         ownerId = json['ownerId'],
         hostAddress = json['hostAddress'],
-        memberCount = json['memberCount'],
+        joinUserList = json['joinUserList'],
         isJoinable = json['isJoinable'],
         createdAt = DateTime.parse(json['createdAt']),
         updatedAt = DateTime.parse(json['updatedAt']),
