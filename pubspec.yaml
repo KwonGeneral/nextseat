@@ -17,11 +17,14 @@ dependencies:
   web_socket_channel: ^3.0.0  # [BSD-3-Clause] 웹소켓 패키지
   logger: ^2.3.0 # [MIT] 로그 패키지
   dart_ipify: ^1.1.1 # [MIT] 아이피 주소 패키지
+  get_it: ^8.0.0 # [MIT] 의존성 주입 패키지
+  injectable: ^2.5.0 # [MIT] 의존성 주입 패키지
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  injectable_generator: ^2.6.2 # [MIT] 의존성 주입 패키지
+  flutter_lints: ^4.0.0 # [BSD-3-Clause] Lint 패키지
   build: ^2.4.1 # [BSD-3-Clause] 빌드 패키지
   glob: ^2.1.2 # [BSD-3-Clause] 파일 패키지
   build_runner: ^2.4.9 # [BSD-3-Clause] 빌드 러너 패키지

@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      nextseat|asset_paths_builder:
+        options:
+          input : assets/images
+          output : lib/presenter/style
+          outputFileName: ImageResource.dart
+
+builders:
+  asset_paths_builder:
+    import: "package:nextseat/builder.dart"
+    builder_factories: ["assetPathsBuilder"]
+    build_extensions: {".webp": [".dart"]}
+    auto_apply: root_package
