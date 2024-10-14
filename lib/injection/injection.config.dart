@@ -16,13 +16,18 @@ import 'package:nextseat/domain/repository/ChatRepositoryImpl.dart' as _i634;
 import 'package:nextseat/domain/repository/UserRepositoryImpl.dart' as _i37;
 import 'package:nextseat/domain/usecase/chat/CreateChatRoomUseCase.dart'
     as _i215;
+import 'package:nextseat/domain/usecase/chat/GetChatMessageListUseCase.dart'
+    as _i140;
 import 'package:nextseat/domain/usecase/chat/GetChatRoomListUseCase.dart'
     as _i120;
+import 'package:nextseat/domain/usecase/chat/GetCurrentChatRoomUseCase.dart'
+    as _i56;
 import 'package:nextseat/domain/usecase/chat/JoinChatRoomUseCase.dart'
     as _i1029;
 import 'package:nextseat/domain/usecase/chat/SendChatMessageUseCase.dart'
     as _i928;
 import 'package:nextseat/domain/usecase/user/CreateUserUseCase.dart' as _i321;
+import 'package:nextseat/domain/usecase/user/GetMyInfoUseCase.dart' as _i619;
 import 'package:nextseat/domain/usecase/user/GetUserUseCase.dart' as _i507;
 import 'package:nextseat/domain/usecase/user/UpdateUserUseCase.dart' as _i873;
 
@@ -60,10 +65,16 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i507.GetUserUseCase(gh<_i37.UserRepositoryImpl>()));
     gh.singleton<_i873.UpdateUserUseCase>(
         () => _i873.UpdateUserUseCase(gh<_i37.UserRepositoryImpl>()));
+    gh.singleton<_i619.GetMyInfoUseCase>(
+        () => _i619.GetMyInfoUseCase(gh<_i37.UserRepositoryImpl>()));
     gh.singleton<_i215.CreateChatRoomUseCase>(
         () => _i215.CreateChatRoomUseCase(gh<_i634.ChatRepositoryImpl>()));
+    gh.singleton<_i140.GetChatMessageListUseCase>(
+        () => _i140.GetChatMessageListUseCase(gh<_i634.ChatRepositoryImpl>()));
     gh.singleton<_i120.GetChatRoomListUseCase>(
         () => _i120.GetChatRoomListUseCase(gh<_i634.ChatRepositoryImpl>()));
+    gh.singleton<_i56.GetCurrentChatRoomUseCase>(
+        () => _i56.GetCurrentChatRoomUseCase(gh<_i634.ChatRepositoryImpl>()));
     gh.singleton<_i1029.JoinChatRoomUseCase>(
         () => _i1029.JoinChatRoomUseCase(gh<_i634.ChatRepositoryImpl>()));
     gh.singleton<_i928.SendChatMessageUseCase>(

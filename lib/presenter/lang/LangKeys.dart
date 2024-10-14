@@ -19,4 +19,13 @@ class LangKeys {
   static const String none = "none";
   static const String appExit = 'app_exit';
   static const String appExitContent = 'app_exit_content';
+
+  static const String wifiConnecting = 'wifi_connecting';
+  static const String wifiConnectFail = 'wifi_connect_fail';
+  static const String connectCheck = 'connect_check';
+
+  static const String reConnect = 're_connect';
+
+  static const String inputMessage = 'input_message';
+  static const String send = 'send';
 }

@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:nextseat/common/contains/Env.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/data/exceptions/DataExceptions.dart';
+import 'package:nextseat/domain/model/ChatModel.dart';
 import 'package:nextseat/domain/model/RoomModel.dart';
 import 'package:nextseat/domain/repository/ChatRepositoryImpl.dart';
 
@@ -49,6 +50,28 @@ class ChatRepository implements ChatRepositoryImpl {
   Future<bool> sendChatMessage({required String roomId, required String message}) async {
     try {
       throw DataException("채팅 전송 실패");
+    } catch (e, s) {
+      Log.e(e, s);
+      rethrow;
+    }
+  }
+
+  // MARK: - 채팅 목록 조회
+  @override
+  Future<List<ChatModel>> getChatMessageList({required String roomId}) {
+    try {
+      throw DataException("채팅 목록 조회 실패");
+    } catch (e, s) {
+      Log.e(e, s);
+      rethrow;
+    }
+  }
+
+  // MARK: - 현재 채팅방 조회
+  @override
+  Future<RoomModel?> getCurrentChatRoom() async {
+    try {
+      throw DataException("현재 채팅방 조회 실패");
     } catch (e, s) {
       Log.e(e, s);
       rethrow;

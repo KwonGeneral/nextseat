@@ -22,5 +22,14 @@ class Korean {
     LangKeys.none: '없음',
     LangKeys.appExit: '앱 종료',
     LangKeys.appExitContent: '한번 더 누르면 종료됩니다.',
+
+    LangKeys.wifiConnecting: '와이파이 연결 중',
+    LangKeys.wifiConnectFail: '와이파이를 확인해주세요.',
+    LangKeys.connectCheck: '연결 확인',
+
+    LangKeys.reConnect: '다시 연결',
+
+    LangKeys.inputMessage: '메세지를 입력하세요',
+    LangKeys.send: '전송',
   };
 }

@@ -42,4 +42,15 @@ class UserRepository implements UserRepositoryImpl {
       rethrow;
     }
   }
+
+  // MARK: - 내 정보 조회
+  @override
+  UserModel getMyInfo() {
+    try {
+      throw DataException("내 정보 조회 실패");
+    } catch (e, s) {
+      Log.e(e, s);
+      rethrow;
+    }
+  }
 }

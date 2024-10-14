@@ -1,7 +1,7 @@
 
-// MARK: - 채팅방 모델
 import 'package:nextseat/domain/model/UserModel.dart';
 
+// MARK: - 채팅방 모델
 class RoomModel {
   String id;  // 채팅방 고유 아이디
   String name;  // 채팅방 이름
