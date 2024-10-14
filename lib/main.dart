@@ -1,125 +1,122 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'package:nextseat/SeatRoutePage.dart';
+import 'package:nextseat/common/Scheme.dart';
+import 'package:nextseat/common/contains/Env.dart';
+import 'package:nextseat/common/utils/Log.dart';
+import 'package:nextseat/common/utils/Utils.dart';
+import 'package:nextseat/presenter/lang/LangKeys.dart';
+import 'package:nextseat/presenter/lang/Messages.dart';
+import 'package:nextseat/presenter/theme/Themes.dart';
+import 'package:nextseat/presenter/widgets/SeatBottomNavigationBar.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  runApp(const SeatApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SeatApp extends StatefulWidget {
+  const SeatApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<SeatApp> createState() => _SeatAppState();
+}
+
+class _SeatAppState extends State<SeatApp> with WidgetsBindingObserver {
+  // MARK: - 초기 설정
+  @override
+  void initState() {
+    super.initState();
+
+    Get.put(GlobalBottomMenuBarViewModel());
+
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  // MARK: - 앱 라이프사이클
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      // 앱이 포그라운드로 전환될 때 호출
+      Log.d('didChangeAppLifecycleState: resumed');
+    } else if (state == AppLifecycleState.paused) {
+      // 앱이 백그라운드로 전환될 때 호출
+      Log.d('didChangeAppLifecycleState: paused');
+    } else if (state == AppLifecycleState.inactive) {
+      // 앱이 중지될 때 호출
+      Log.d('didChangeAppLifecycleState: inactive');
+    } else if (state == AppLifecycleState.detached) {
+      // 앱이 종료될 때 호출
+      Log.d('didChangeAppLifecycleState: detached');
+    }
+  }
+
+  // MARK: - 플랫폼 밝기 변경
+  @override
+  void didChangePlatformBrightness() {
+    Log.d('didChangePlatformBrightness: ${Utils.isDarkMode()}');
+  }
+
+  // MARK: - 앱 종료
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // MARK: - 앱 초기화
+  static TransitionBuilder seatInit({
+    TransitionBuilder? builder,
+  }) {
+    return (BuildContext context, Widget? child) {
+      if (builder != null) {
+        return builder(context, FlutterEasyLoading(child: child));
+      } else {
+        return PopScope(
+            canPop: true,
+            onPopInvokedWithResult: (bool didPop, dynamic result) {
+              Log.d('[seatInit] onPopInvokedWithResult: $didPop, $result');
+            },
+            child: MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: const TextScaler.linear(1.0),
+              ),
+              child: FlutterEasyLoading(child: child),
+            ));
+      }
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: Messages.get(LangKeys.appName),
+      translationsKeys: Messages.translations,
+      locale: const Locale('ko', 'KR'),
+      fallbackLocale: const Locale('ko', 'KR'),
+      builder: seatInit(),
+      popGesture: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: SeatThemes().primary),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      darkTheme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
+      getPages: appRoutes,
+      initialRoute: Scheme.SPLASH.path,
+      themeMode: ThemeMode.system,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+// MARK: - 라우트 관리
+final List<GetPage> appRoutes = [
+  // MARK: - 미들웨어 페이지
+  SeatRoutePage.middlewarePage(),
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  // MARK: - 스플래시 페이지
+  SeatRoutePage.splashPage(),
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
+  // MARK: - 홈 페이지
+  SeatRoutePage.homePage(),
+];

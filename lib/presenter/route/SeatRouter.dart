@@ -148,7 +148,7 @@ class SeatRouter {
           currentBackPressTime!.difference(DateTime.now()).inSeconds.abs() >
               1) {
         currentBackPressTime = DateTime.now();
-        Get.snackbar(Messages.get(LangKeys.app_exit), Messages.get(LangKeys.app_exit_content));
+        Get.snackbar(Messages.get(LangKeys.appExit), Messages.get(LangKeys.appExitContent));
         return false;
       }
       // 앱 종료

@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nextseat/common/Scheme.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/presenter/BaseViewModel.dart';
+import 'package:nextseat/presenter/route/SeatRouter.dart';
 
 // MARK: - 스플래시 페이지
 class SplashPage extends StatelessWidget {
@@ -49,6 +51,10 @@ class SplashPageViewModel extends BaseViewModel {
   @override
   Future<void> dataUpdate() async {
     Log.d('SplashPageViewModel dataUpdate');
+
+    // MARK: - 홈 페이지 이동
+    SeatRouter.to(scheme: Scheme.HOME);
+
     update();
   }
 

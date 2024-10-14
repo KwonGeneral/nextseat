@@ -19,7 +19,7 @@ enum BottomMenuType {
   static String getTitle(BottomMenuType type) {
     switch(type) {
       case HOME:
-        return Messages.get(LangKeys.bottom_nav_home);
+        return Messages.get(LangKeys.bottomNavHome);
     }
   }
 

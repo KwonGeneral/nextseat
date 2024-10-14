@@ -77,7 +77,7 @@ class SeatDialog {
         topWidget: topWidget,
         bodyWidget: bodyWidget,
         description: description,
-        positiveText: positiveText ?? Messages.get(LangKeys.confirm_ok),
+        positiveText: positiveText ?? Messages.get(LangKeys.confirmOk),
         negativeText: negativeText ?? Messages.get(LangKeys.cancel),
         positiveCallback: positiveCallback != null
             ? () {
@@ -144,7 +144,7 @@ class SeatDialog {
       topWidget: topWidget,
       bodyWidget: bodyWidget,
       description: description,
-      positiveText: positiveText ?? Messages.get(LangKeys.confirm_ok),
+      positiveText: positiveText ?? Messages.get(LangKeys.confirmOk),
       negativeText: negativeText ?? Messages.get(LangKeys.cancel),
       positiveCallback: positiveCallback,
       negativeCallback: negativeCallback,

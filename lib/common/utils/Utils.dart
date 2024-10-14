@@ -9,6 +9,10 @@ import 'package:nextseat/common/types/PlatformType.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Utils {
+  // MARK: - 다크모드 여부 반환
+  static bool isDarkMode() {
+    return Get.isDarkMode;
+  }
 
   // MARK: - 플랫폼 타입 조회
   static PlatformType getPlatformType() {
