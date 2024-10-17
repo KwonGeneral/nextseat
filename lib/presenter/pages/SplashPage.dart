@@ -53,7 +53,7 @@ class SplashPageViewModel extends BaseViewModel {
     Log.d('SplashPageViewModel dataUpdate');
 
     // MARK: - 홈 페이지 이동
-    SeatRouter.to(scheme: Scheme.HOME);
+    SeatRouter.to(scheme: Scheme.HOME, isForce: true);
 
     update();
   }

@@ -67,6 +67,9 @@ class SeatRoutePage {
 
         // 딥 링크 미들웨어
         SeatMiddleware.deepLinkMiddleware(),
+
+        // 와이파이 체크 미들웨어
+        SeatMiddleware.wifiCheckMiddleware(),
       ],
     );
   }

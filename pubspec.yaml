@@ -24,7 +24,6 @@ dependencies:
   android_id: ^0.4.0 # [BSD-3-Clause] 안드로이드 아이디 패키지
   url_launcher: ^6.3.0 # [BSD-3-Clause] URL 런처 패키지
   package_info_plus: ^8.0.2 # [BSD-3-Clause] 패키지 정보 패키지
-  uni_links: ^0.5.1 # [BSD-2-Clause] 딥링크 패키지
   webview_flutter: ^4.9.0 # [BSD-3-Clause] 웹뷰 패키지
   chat_bubbles: ^1.6.0 # [MIT] 채팅 버블 패키지
   lottie: ^3.1.2 # [MIT] 로티 패키지
