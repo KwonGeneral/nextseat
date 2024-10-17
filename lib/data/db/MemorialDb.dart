@@ -2,12 +2,17 @@
 
 import 'dart:async';
 
+import 'package:nextseat/domain/model/UserModel.dart';
+
 // MARK: - 해당 DB는 휘발성 DB로 앱이 종료되면 초기화
 class MemorialDb {
   static final MemorialDb _instance = MemorialDb._internal();
 
   factory MemorialDb() => _instance;
   MemorialDb._internal();
+
+  // 유저 모델
+  UserModel myInfo = UserModel.empty();
 
   // 다이얼로그 닫힌 시간
   int dialogCloseTime = 0;

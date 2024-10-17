@@ -2,8 +2,8 @@
 // MARK: - 유저 모델
 class UserModel {
   String id;  // 유저 고유 아이디
-  String name;  // 유저 이름
-  String number;  // 유저 번호
+  String? name;  // 유저 이름
+  String? number;  // 유저 번호
   DateTime createdAt;  // 유저 생성 시간
   DateTime updatedAt;  // 유저 업데이트 시간
 
@@ -14,6 +14,22 @@ class UserModel {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  // Empty
+  factory UserModel.empty({
+    String? name,
+    String? number,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return UserModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name,
+      number: number,
+      createdAt: createdAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {

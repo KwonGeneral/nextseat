@@ -15,6 +15,22 @@ class ChatModel {
     required this.createdAt,
   });
 
+  // Empty
+  factory ChatModel.empty({
+    String? roomId,
+    String? userId,
+    String? message,
+    DateTime? createdAt,
+  }) {
+    return ChatModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      roomId: roomId ?? '',
+      userId: userId ?? '',
+      message: message ?? '',
+      createdAt: createdAt ?? DateTime.now(),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

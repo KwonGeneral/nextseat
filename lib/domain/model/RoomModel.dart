@@ -9,10 +9,10 @@ class RoomModel {
   String ownerId;  // 채팅방 소유자 아이디
   String? hostAddress;  // 채팅방 호스트 주소
   List<UserModel> joinUserList;  // 채팅방 참여중인 유저
-  bool isJoinable;  // 채팅방 참여 가능 여부
+  bool isJoinAble;  // 채팅방 참여 가능 여부
   DateTime createdAt;  // 채팅방 생성 시간
   DateTime updatedAt;  // 채팅방 업데이트 시간
-  DateTime findedAt;  // 채팅방 검색 시간
+  DateTime findAt;  // 채팅방 검색 시간
 
   RoomModel({
     required this.id,
@@ -21,11 +21,37 @@ class RoomModel {
     required this.ownerId,
     required this.hostAddress,
     required this.joinUserList,
-    required this.isJoinable,
+    required this.isJoinAble,
     required this.createdAt,
     required this.updatedAt,
-    required this.findedAt,
+    required this.findAt,
   });
+
+  // Empty
+  factory RoomModel.empty({
+    String? name,
+    String? number,
+    String? ownerId,
+    String? hostAddress,
+    List<UserModel>? joinUserList,
+    bool? isJoinAble,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    DateTime? findAt,
+  }) {
+    return RoomModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name ?? '',
+      number: number ?? '',
+      ownerId: ownerId ?? '',
+      hostAddress: hostAddress ?? '',
+      joinUserList: joinUserList ?? [],
+      isJoinAble: isJoinAble ?? false,
+      createdAt: createdAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(),
+      findAt: findAt ?? DateTime.now(),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -35,10 +61,10 @@ class RoomModel {
       'ownerId': ownerId,
       'hostAddress': hostAddress,
       'joinUserList': joinUserList,
-      'isJoinable': isJoinable,
+      'isJoinAble': isJoinAble,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
-      'findedAt': findedAt,
+      'findAt': findAt,
     };
   }
 
@@ -49,10 +75,10 @@ class RoomModel {
         ownerId = json['ownerId'],
         hostAddress = json['hostAddress'],
         joinUserList = json['joinUserList'],
-        isJoinable = json['isJoinable'],
+        isJoinAble = json['isJoinAble'],
         createdAt = DateTime.parse(json['createdAt']),
         updatedAt = DateTime.parse(json['updatedAt']),
-        findedAt = DateTime.parse(json['findedAt']);
+        findAt = DateTime.parse(json['findAt']);
 
   @override
   String toString() {

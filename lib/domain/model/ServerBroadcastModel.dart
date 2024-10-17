@@ -7,7 +7,7 @@ class ServerBroadcastModel {
   String address;  // 서버 주소
   String name;  // 서버 이름
   List<UserModel> joinUserList;  // 서버에 참여중인 유저
-  bool isJoinable;  // 서버 참여 가능 여부
+  bool isJoinAble;  // 서버 참여 가능 여부
   DateTime timestamp;  // 서버 생성 시간
 
   ServerBroadcastModel({
@@ -15,9 +15,27 @@ class ServerBroadcastModel {
     required this.address,
     required this.name,
     required this.joinUserList,
-    required this.isJoinable,
+    required this.isJoinAble,
     required this.timestamp,
   });
+
+  // Empty
+  factory ServerBroadcastModel.empty({
+    String? address,
+    String? name,
+    List<UserModel>? joinUserList,
+    bool? isJoinAble,
+    DateTime? timestamp,
+  }) {
+    return ServerBroadcastModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      address: address ?? '',
+      name: name ?? '',
+      joinUserList: joinUserList ?? [],
+      isJoinAble: isJoinAble ?? false,
+      timestamp: timestamp ?? DateTime.now(),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -25,7 +43,7 @@ class ServerBroadcastModel {
       'address': address,
       'name': name,
       'joinUserList': joinUserList,
-      'isJoinable': isJoinable,
+      'isJoinAble': isJoinAble,
       'timestamp': timestamp,
     };
   }
@@ -35,7 +53,7 @@ class ServerBroadcastModel {
         address = json['address'],
         name = json['name'],
         joinUserList = json['joinUserList'],
-        isJoinable = json['isJoinable'],
+        isJoinAble = json['isJoinAble'],
         timestamp = DateTime.parse(json['timestamp']);
 
   @override

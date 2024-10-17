@@ -3,9 +3,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:nextseat/SeatRoutePage.dart';
 import 'package:nextseat/common/Scheme.dart';
-import 'package:nextseat/common/contains/Env.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/common/utils/Utils.dart';
+import 'package:nextseat/data/service/UdpService.dart';
+import 'package:nextseat/data/service/WebSocketService.dart';
 import 'package:nextseat/injection/injection.dart';
 import 'package:nextseat/presenter/lang/LangKeys.dart';
 import 'package:nextseat/presenter/lang/Messages.dart';
@@ -13,11 +14,17 @@ import 'package:nextseat/presenter/theme/Themes.dart';
 import 'package:nextseat/presenter/widgets/SeatBottomNavigationBar.dart';
 
 Future<void> main() async {
-  // MARK: - 플러터 엔진 상호작용 초기화 (해당 함수는 필수로 사용하며, 무조건 최상위에 존재해야함)
+  // MARK: - 플러터 엔진 상호작용 초기화
   WidgetsFlutterBinding.ensureInitialized();
 
   // MARK: - 의존성 역전 셋팅
   await getItSetup();
+
+  // MARK: - Udp 서비스 시작
+  await UdpService().start();
+
+  // MARK: - WebSocket 서비스 시작
+  await WebSocketService().start();
 
   runApp(const SeatApp());
 }
