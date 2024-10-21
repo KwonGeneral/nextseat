@@ -1,4 +1,7 @@
 
+import 'package:nextseat/common/contains/PortContains.dart';
+import 'package:nextseat/data/service/UdpService.dart';
+import 'package:nextseat/data/service/WebSocketService.dart';
 import 'package:nextseat/domain/model/UserModel.dart';
 
 // MARK: - 채팅방 모델
@@ -8,6 +11,8 @@ class RoomModel {
   String number;  // 채팅방 번호
   String ownerId;  // 채팅방 소유자 아이디
   String? hostAddress;  // 채팅방 호스트 주소
+  int udpPort;  // 채팅방 UDP 포트
+  int webSocketPort;  // 채팅방 웹소켓 포트
   List<UserModel> joinUserList;  // 채팅방 참여중인 유저
   bool isJoinAble;  // 채팅방 참여 가능 여부
   DateTime createdAt;  // 채팅방 생성 시간
@@ -20,6 +25,8 @@ class RoomModel {
     required this.number,
     required this.ownerId,
     required this.hostAddress,
+    required this.udpPort,
+    required this.webSocketPort,
     required this.joinUserList,
     required this.isJoinAble,
     required this.createdAt,
@@ -33,6 +40,8 @@ class RoomModel {
     String? number,
     String? ownerId,
     String? hostAddress,
+    int? udpPort,
+    int? webSocketPort,
     List<UserModel>? joinUserList,
     bool? isJoinAble,
     DateTime? createdAt,
@@ -45,6 +54,8 @@ class RoomModel {
       number: number ?? '',
       ownerId: ownerId ?? '',
       hostAddress: hostAddress ?? '',
+      udpPort: udpPort ?? PortContains.UDP_RECEIVER_PORT,
+      webSocketPort: webSocketPort ?? WebSocketService().currentPort,
       joinUserList: joinUserList ?? [],
       isJoinAble: isJoinAble ?? false,
       createdAt: createdAt ?? DateTime.now(),
@@ -60,6 +71,8 @@ class RoomModel {
       'number': number,
       'ownerId': ownerId,
       'hostAddress': hostAddress,
+      'udpPort': udpPort,
+      'webSocketPort': webSocketPort,
       'joinUserList': joinUserList,
       'isJoinAble': isJoinAble,
       'createdAt': createdAt.millisecondsSinceEpoch.toString(),
@@ -74,6 +87,8 @@ class RoomModel {
         number = json['number'],
         ownerId = json['ownerId'],
         hostAddress = json['hostAddress'],
+        udpPort = int.tryParse(json['udpPort'] ?? '0') ?? PortContains.UDP_RECEIVER_PORT,
+        webSocketPort = int.tryParse(json['webSocketPort'] ?? '0') ?? WebSocketService().currentPort,
         joinUserList = json['joinUserList'],
         isJoinAble = json['isJoinAble'],
         createdAt = DateTime.fromMillisecondsSinceEpoch(int.tryParse(json['createdAt'] ?? '0') ?? 0),

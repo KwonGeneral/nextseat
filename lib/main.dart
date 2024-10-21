@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:nextseat/SeatRoutePage.dart';
 import 'package:nextseat/common/Scheme.dart';
+import 'package:nextseat/common/contains/PortContains.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/common/utils/Utils.dart';
 import 'package:nextseat/data/db/SharedDb.dart';
@@ -27,12 +28,13 @@ Future<void> main() async {
   // MARK: - 프리로드
   await SharedDb().preloading();
 
-
   // MARK: - Udp 서비스 시작
   await UdpService().start();
 
   // MARK: - WebSocket 서비스 시작
-  await WebSocketService().start();
+  await WebSocketService().start(
+    port: PortContains.WEBSOCKET_PROT,
+  );
 
   runApp(const SeatApp());
 }

@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:nextseat/common/contains/PortContains.dart';
 import 'package:nextseat/common/utils/Log.dart';
 
 // MARK: - WebSocket Service
@@ -14,21 +15,22 @@ class WebSocketService {
     Log.d('[ UdpService ] created');
   }
 
-  // WebSocket 포트 (11000 ~ 12000 랜덤)
-  static int WEBSOCKET_PROT = Random().nextInt(1000) + 11000;
-
   // HttpServer
   HttpServer? _socketServer;
 
   // WebSocket
   WebSocket? _webSocket;
 
+  int currentPort = PortContains.WEBSOCKET_PROT;
+
   // MARK: - WebSocket Service 시작
-  Future<void> start() async {
+  Future<void> start({required int port}) async {
     Log.d("[ WebSocketService: start ] WebSocket Service 시작");
 
     // 웹소켓 시작
-    await _startWebSocketServer();
+    await _startWebSocketServer(
+      port: port,
+    );
   }
 
   // MARK: - WebSocket Service 종료
@@ -42,13 +44,26 @@ class WebSocketService {
     if(_webSocket != null) {
       await _webSocket?.close();
     }
+
+    _socketServer = null;
+    _webSocket = null;
   }
 
-  Future<void> _startWebSocketServer() async {
+  Future<void> _startWebSocketServer({required int port}) async {
     Log.d('[ WebSocketService: _startWebSocketServer] Starting WebSocket server');
     try {
-      _socketServer = await HttpServer.bind(InternetAddress.anyIPv4, WEBSOCKET_PROT);
-      Log.d('[ WebSocketService: _startWebSocketServer] WebSocket server started on port $WEBSOCKET_PROT');
+      // 포트가 변경된 경우 서버를 종료하고 다시 시작
+      if(port != currentPort) {
+        await stop();
+      }
+
+      // 포트가 같은 경우 무시
+      if(port == currentPort && _socketServer != null) {
+        return;
+      }
+
+      _socketServer = await HttpServer.bind(InternetAddress.anyIPv4, port);
+      Log.d('[ WebSocketService: _startWebSocketServer] WebSocket server started on port $port');
 
       if(_socketServer != null) {
         _socketServer!.listen((HttpRequest request) async {
@@ -72,6 +87,8 @@ class WebSocketService {
           },
         );
       }
+
+      currentPort = port;
     } catch (e, s) {
       Log.e(e, s);
     }

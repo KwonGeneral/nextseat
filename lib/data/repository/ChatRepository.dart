@@ -17,6 +17,32 @@ import 'package:nextseat/injection/injection.dart';
 // MARK: - 채팅 Repository
 @Singleton(as: ChatRepositoryImpl, env: [Env.DEV, Env.DEPLOY])
 class ChatRepository implements ChatRepositoryImpl {
+  // MARK: - 현재 채팅방 조회
+  @override
+  Future<RoomModel> getCurrentChatRoom() async {
+    try {
+      RoomModel? room = ChatDb().currentRoom;
+
+      // 현재 채팅방이 없는 경우
+      if(room == null) {
+        // 채팅방 생성
+        room = await createChatRoom(
+          name: '채팅방_${DateTime.now().millisecondsSinceEpoch}'
+        );
+
+        // 채팅방 입장
+        await joinChatRoom(roomId: room.id);
+
+        return room;
+      }
+
+      return room;
+    } catch (e, s) {
+      Log.e(e, s);
+      rethrow;
+    }
+  }
+
   // MARK: - 채팅방 생성
   @override
   Future<RoomModel> createChatRoom({required String name}) async {
@@ -153,17 +179,6 @@ class ChatRepository implements ChatRepositoryImpl {
 
       ChatDb().chatList = tChatList;
       return tChatList;
-    } catch (e, s) {
-      Log.e(e, s);
-      rethrow;
-    }
-  }
-
-  // MARK: - 현재 채팅방 조회
-  @override
-  Future<RoomModel?> getCurrentChatRoom() async {
-    try {
-      return ChatDb().currentRoom;
     } catch (e, s) {
       Log.e(e, s);
       rethrow;

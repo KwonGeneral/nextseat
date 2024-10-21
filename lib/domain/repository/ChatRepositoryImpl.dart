@@ -24,5 +24,5 @@ abstract class ChatRepositoryImpl {
   Future<List<ChatModel>> getChatMessageList();
 
   // MARK: - 현재 채팅방 조회
-  Future<RoomModel?> getCurrentChatRoom();
+  Future<RoomModel> getCurrentChatRoom();
 }

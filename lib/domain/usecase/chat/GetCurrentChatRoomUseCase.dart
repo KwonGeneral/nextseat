@@ -13,12 +13,12 @@ class GetCurrentChatRoomUseCase {
 
   GetCurrentChatRoomUseCase(this.chatRepository);
 
-  Future<RoomModel?> call() async {
+  Future<RoomModel> call() async {
     try {
       return await chatRepository.getCurrentChatRoom();
     } catch(e, s) {
       Log.e(e, s);
-      return null;
+      return RoomModel.empty();
     }
   }
 }
