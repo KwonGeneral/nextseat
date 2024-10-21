@@ -62,9 +62,9 @@ class RoomModel {
       'hostAddress': hostAddress,
       'joinUserList': joinUserList,
       'isJoinAble': isJoinAble,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'findAt': findAt,
+      'createdAt': createdAt.millisecondsSinceEpoch.toString(),
+      'updatedAt': updatedAt.millisecondsSinceEpoch.toString(),
+      'findAt': findAt.millisecondsSinceEpoch.toString(),
     };
   }
 
@@ -76,9 +76,9 @@ class RoomModel {
         hostAddress = json['hostAddress'],
         joinUserList = json['joinUserList'],
         isJoinAble = json['isJoinAble'],
-        createdAt = DateTime.parse(json['createdAt']),
-        updatedAt = DateTime.parse(json['updatedAt']),
-        findAt = DateTime.parse(json['findAt']);
+        createdAt = DateTime.fromMillisecondsSinceEpoch(int.tryParse(json['createdAt'] ?? '0') ?? 0),
+        updatedAt = DateTime.fromMillisecondsSinceEpoch(int.tryParse(json['updatedAt'] ?? '0') ?? 0),
+        findAt = DateTime.fromMillisecondsSinceEpoch(int.tryParse(json['findAt'] ?? '0') ?? 0);
 
   @override
   String toString() {

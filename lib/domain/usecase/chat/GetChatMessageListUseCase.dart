@@ -13,20 +13,9 @@ class GetChatMessageListUseCase {
 
   GetChatMessageListUseCase(this.chatRepository);
 
-  Future<List<ChatModel>> call({String? roomId}) async {
+  Future<List<ChatModel>> call() async {
     try {
-      String? currentRoomId = roomId;
-      if(currentRoomId == null) {
-        // 현재 채팅방 조회
-        RoomModel? currentRoom = await chatRepository.getCurrentChatRoom();
-        if(currentRoom == null) {
-          return [];
-        }
-
-        currentRoomId = currentRoom.id;
-      }
-
-      return await chatRepository.getChatMessageList(roomId: currentRoomId);
+      return await chatRepository.getChatMessageList();
     } catch(e, s) {
       Log.e(e, s);
       return [];

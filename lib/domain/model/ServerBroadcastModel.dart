@@ -38,23 +38,36 @@ class ServerBroadcastModel {
   }
 
   Map<String, dynamic> toJson() {
+    List<Map<String, dynamic>> tJoinUserList = [];
+    for (UserModel user in joinUserList) {
+      tJoinUserList.add(user.toJson());
+    }
+
     return {
       'id': id,
       'address': address,
       'name': name,
-      'joinUserList': joinUserList,
+      'joinUserList': tJoinUserList,
       'isJoinAble': isJoinAble,
-      'timestamp': timestamp,
+      'timestamp': timestamp.millisecondsSinceEpoch.toString(),
     };
   }
 
-  ServerBroadcastModel.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        address = json['address'],
-        name = json['name'],
-        joinUserList = json['joinUserList'],
-        isJoinAble = json['isJoinAble'],
-        timestamp = DateTime.parse(json['timestamp']);
+  factory ServerBroadcastModel.fromJson(Map<String, dynamic> json) {
+    List<UserModel> tJoinUserList = [];
+    for (Map<String, dynamic> user in json['joinUserList']) {
+      tJoinUserList.add(UserModel.fromJson(user));
+    }
+
+    return ServerBroadcastModel(
+      id: json['id'] ?? '',
+      address: json['address'] ?? '',
+      name: json['name'] ?? '',
+      joinUserList: tJoinUserList,
+      isJoinAble: json['isJoinAble'] ?? false,
+      timestamp: DateTime.fromMillisecondsSinceEpoch(int.tryParse(json['timestamp'] ?? '0') ?? 0),
+    );
+  }
 
   @override
   String toString() {

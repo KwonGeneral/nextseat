@@ -2,18 +2,19 @@
 
 import 'package:injectable/injectable.dart';
 import 'package:nextseat/common/utils/Log.dart';
+import 'package:nextseat/domain/model/RoomModel.dart';
 import 'package:nextseat/domain/repository/ChatRepositoryImpl.dart';
 
-// MARK: - 채팅 전송 UseCase
+// MARK: - 채팅방 퇴장 UseCase
 @singleton
-class SendChatMessageUseCase {
+class LeaveChatRoomUseCase {
   final ChatRepositoryImpl chatRepository;
 
-  SendChatMessageUseCase(this.chatRepository);
+  LeaveChatRoomUseCase(this.chatRepository);
 
-  Future<bool> call({required String message}) async {
+  Future<bool> call() async {
     try {
-      return await chatRepository.sendChatMessage(message: message);
+      return await chatRepository.leaveChatRoom();
     } catch(e, s) {
       Log.e(e, s);
       return false;

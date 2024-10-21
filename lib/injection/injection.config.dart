@@ -24,12 +24,13 @@ import 'package:nextseat/domain/usecase/chat/GetCurrentChatRoomUseCase.dart'
     as _i56;
 import 'package:nextseat/domain/usecase/chat/JoinChatRoomUseCase.dart'
     as _i1029;
+import 'package:nextseat/domain/usecase/chat/LeaveChatRoomUseCase.dart'
+    as _i465;
 import 'package:nextseat/domain/usecase/chat/SendChatMessageUseCase.dart'
     as _i928;
 import 'package:nextseat/domain/usecase/user/CreateUserUseCase.dart' as _i321;
 import 'package:nextseat/domain/usecase/user/GetMyInfoUseCase.dart' as _i619;
-import 'package:nextseat/domain/usecase/user/GetUserUseCase.dart' as _i507;
-import 'package:nextseat/domain/usecase/user/UpdateUserUseCase.dart' as _i873;
+import 'package:nextseat/domain/usecase/user/UpdateMyInfoUseCase.dart' as _i47;
 
 const String _dev = 'dev';
 const String _deploy = 'deploy';
@@ -61,12 +62,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i321.CreateUserUseCase>(
         () => _i321.CreateUserUseCase(gh<_i37.UserRepositoryImpl>()));
-    gh.singleton<_i507.GetUserUseCase>(
-        () => _i507.GetUserUseCase(gh<_i37.UserRepositoryImpl>()));
-    gh.singleton<_i873.UpdateUserUseCase>(
-        () => _i873.UpdateUserUseCase(gh<_i37.UserRepositoryImpl>()));
     gh.singleton<_i619.GetMyInfoUseCase>(
         () => _i619.GetMyInfoUseCase(gh<_i37.UserRepositoryImpl>()));
+    gh.singleton<_i47.UpdateMyInfoUseCase>(
+        () => _i47.UpdateMyInfoUseCase(gh<_i37.UserRepositoryImpl>()));
     gh.singleton<_i215.CreateChatRoomUseCase>(
         () => _i215.CreateChatRoomUseCase(gh<_i634.ChatRepositoryImpl>()));
     gh.singleton<_i140.GetChatMessageListUseCase>(
@@ -79,6 +78,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1029.JoinChatRoomUseCase(gh<_i634.ChatRepositoryImpl>()));
     gh.singleton<_i928.SendChatMessageUseCase>(
         () => _i928.SendChatMessageUseCase(gh<_i634.ChatRepositoryImpl>()));
+    gh.singleton<_i465.LeaveChatRoomUseCase>(
+        () => _i465.LeaveChatRoomUseCase(gh<_i634.ChatRepositoryImpl>()));
     return this;
   }
 }

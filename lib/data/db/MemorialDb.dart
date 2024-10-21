@@ -11,9 +11,6 @@ class MemorialDb {
   factory MemorialDb() => _instance;
   MemorialDb._internal();
 
-  // 유저 모델
-  UserModel myInfo = UserModel.empty();
-
   // 다이얼로그 닫힌 시간
   int dialogCloseTime = 0;
 

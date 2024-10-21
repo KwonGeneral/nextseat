@@ -108,7 +108,7 @@ class HomePageViewModel extends BaseViewModel {
         );
 
   // 내 정보
-  UserModel? myInfo = getIt<GetMyInfoUseCase>()();
+  UserModel? myInfo;
 
   // 채팅 목록
   List<ChatModel> chatList = [];
@@ -127,13 +127,11 @@ class HomePageViewModel extends BaseViewModel {
 
     // 채팅 전송
     getIt<SendChatMessageUseCase>()(
-      roomId: roomInfo?.id ?? '',
       message: messageController.text,
     );
 
     chatList.add(
-      ChatModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      ChatModel.empty(
         roomId: roomInfo?.id ?? '',
         userId: myInfo?.id ?? '',
         message: messageController.text,
@@ -160,7 +158,7 @@ class HomePageViewModel extends BaseViewModel {
     Log.d('HomePageViewModel dataUpdate');
 
     chatList = await getIt<GetChatMessageListUseCase>()();
-    myInfo = getIt<GetMyInfoUseCase>()();
+    myInfo = await getIt<GetMyInfoUseCase>()();
     roomInfo = await getIt<GetCurrentChatRoomUseCase>()();
     update();
   }

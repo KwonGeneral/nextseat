@@ -5,6 +5,7 @@ class ChatModel {
   String roomId;  // 채팅이 속한 채팅방 아이디
   String userId;  // 채팅을 보낸 유저 아이디
   String message;  // 채팅 메시지
+  bool isSendSuccess = false;  // 채팅 전송 성공 여부
   DateTime createdAt;  // 채팅 생성 시간
 
   ChatModel({
@@ -13,6 +14,7 @@ class ChatModel {
     required this.userId,
     required this.message,
     required this.createdAt,
+    required this.isSendSuccess,
   });
 
   // Empty
@@ -27,6 +29,7 @@ class ChatModel {
       roomId: roomId ?? '',
       userId: userId ?? '',
       message: message ?? '',
+      isSendSuccess: false,
       createdAt: createdAt ?? DateTime.now(),
     );
   }
@@ -37,7 +40,8 @@ class ChatModel {
       'roomId': roomId,
       'userId': userId,
       'message': message,
-      'createdAt': createdAt,
+      'isSendSuccess': isSendSuccess,
+      'createdAt': createdAt.millisecondsSinceEpoch.toString(),
     };
   }
 
@@ -46,7 +50,8 @@ class ChatModel {
         roomId = json['roomId'],
         userId = json['userId'],
         message = json['message'],
-        createdAt = DateTime.parse(json['createdAt']);
+        isSendSuccess = json['isSendSuccess'] ?? false,
+        createdAt = DateTime.fromMillisecondsSinceEpoch(int.tryParse(json['createdAt'] ?? '0') ?? 0);
 
   @override
   String toString() {

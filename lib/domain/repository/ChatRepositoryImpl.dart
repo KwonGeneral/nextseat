@@ -14,11 +14,14 @@ abstract class ChatRepositoryImpl {
   // MARK: - 채팅방 입장
   Future<bool> joinChatRoom({required String roomId});
 
+  // MARK: - 채팅방 퇴장
+  Future<bool> leaveChatRoom();
+
   // MARK: - 채팅 전송
-  Future<bool> sendChatMessage({required String roomId, required String message});
+  Future<bool> sendChatMessage({required String message});
 
   // MARK: - 채팅 목록 조회
-  Future<List<ChatModel>> getChatMessageList({required String roomId});
+  Future<List<ChatModel>> getChatMessageList();
 
   // MARK: - 현재 채팅방 조회
   Future<RoomModel?> getCurrentChatRoom();

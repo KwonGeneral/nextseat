@@ -1,11 +1,14 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/common/utils/Utils.dart';
 import 'package:nextseat/data/db/MemorialDb.dart';
 import 'package:nextseat/domain/model/ServerBroadcastModel.dart';
+import 'package:nextseat/domain/usecase/user/GetMyInfoUseCase.dart';
+import 'package:nextseat/injection/injection.dart';
 import 'package:udp/udp.dart';
 
 // MARK: - Udp Service
@@ -20,8 +23,8 @@ class UdpService {
   // UDP 서버 포트 (0 고정)
   static const int SENDER_PORT = 0;
 
-  // UDP 클라이언트 포트 (11000 ~ 12000 랜덤)
-  static int RECEIVER_PORT = Random().nextInt(1000) + 11000;
+  // UDP 클라이언트 포트
+  static int RECEIVER_PORT = 11174;
 
   // 보내는 UDP
   UDP? _senderUdp;
@@ -39,24 +42,11 @@ class UdpService {
   Future<void> start() async {
     Log.d("[ UdpService: start ] Udp Service 시작");
 
-    String? getIp = await Utils.getIPAddress();
-    Log.d("[ UdpService: _startNsdService ] getIp: $getIp");
-
     // 메인 Job 시작
     await _startMainJob();
 
     // Nsd 서비스 시작
-    await _startNsdService(
-      broadcastModel: ServerBroadcastModel.empty(
-        address: getIp,
-        isJoinAble: true,
-        joinUserList: [
-          MemorialDb().myInfo,
-        ],
-        name: 'NextSeat_$getIp',
-        timestamp: DateTime.now(),
-      ),
-    );
+    await _startNsdService();
   }
 
   // MARK: - Udp Service 종료
@@ -82,7 +72,7 @@ class UdpService {
   }
 
   // MARK: - Nsd 서비스 시작
-  Future<void> _startNsdService({required ServerBroadcastModel broadcastModel}) async {
+  Future<void> _startNsdService() async {
     Log.d("[ UdpService: _startNsdService ] Nsd 서비스 시작");
 
     // Udp 서버 시작
@@ -97,17 +87,46 @@ class UdpService {
     Log.d("[ UdpService: _startNsdService ] _receiverUdp: $_receiverUdp");
 
     // Send Job 시작
-    _sendJob = Timer.periodic(const Duration(seconds: 1), (_) async {
-
+    _sendJob = Timer.periodic(const Duration(seconds: 5), (_) async {
       // 브로드 캐스트 전송
-      await _sendBroadcast(
-        broadcastModel: broadcastModel
-      );
+      await _sendBroadcast();
+    });
+
+    // 브로드 캐스트 수신
+    _receiverUdp?.asStream().listen((Datagram? datagram) async {
+      if(datagram != null) {
+        String data = utf8.decode(datagram.data);
+
+        try {
+          final ServerBroadcastModel broadcastModel = ServerBroadcastModel.fromJson(json.decode(data));
+          String? myIp = await Utils.getIPAddress();
+          if(broadcastModel.address == myIp && myIp != null) {
+            return;
+          }
+
+          Log.d("[ UdpService: _receiveBroadcast ] * 브로드 캐스트 수신"
+          "\n내 아이피: $myIp"
+              "\n${broadcastModel.toJson()}");
+        } catch(e, s) {
+          Log.e(e, s);
+        }
+      }
     });
   }
 
   // MARK: - 브로드 캐스트 전송
-  Future<void> _sendBroadcast({required ServerBroadcastModel broadcastModel}) async {
+  Future<void> _sendBroadcast() async {
+    String? getIp = await Utils.getIPAddress();
+    ServerBroadcastModel broadcastModel = ServerBroadcastModel.empty(
+      address: getIp,
+      isJoinAble: true,
+      joinUserList: [
+        await getIt<GetMyInfoUseCase>()(),
+      ],
+      name: 'NextSeat_$getIp',
+      timestamp: DateTime.now(),
+    );
+
     final data = utf8.encode(json.encode(broadcastModel.toJson()));
     _senderUdp?.send(data, Endpoint.broadcast(port: Port(RECEIVER_PORT)));
   }

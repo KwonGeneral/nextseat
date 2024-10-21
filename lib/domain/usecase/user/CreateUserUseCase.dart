@@ -12,9 +12,9 @@ class CreateUserUseCase {
 
   CreateUserUseCase(this.userRepository);
 
-  Future<UserModel?> call({required UserModel userModel}) async {
+  Future<UserModel?> call({required String? name, required String? number}) async {
     try {
-      return await userRepository.createUser(userModel: userModel);
+      return await userRepository.createUser(name: name, number: number);
     } catch(e, s) {
       Log.e(e, s);
       return null;

@@ -13,12 +13,12 @@ class GetMyInfoUseCase {
 
   GetMyInfoUseCase(this.userRepository);
 
-  UserModel? call() {
+  Future<UserModel> call() async {
     try {
       return userRepository.getMyInfo();
     } catch(e, s) {
       Log.e(e, s);
-      return null;
+      return UserModel.empty();
     }
   }
 }

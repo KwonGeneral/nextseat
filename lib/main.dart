@@ -5,6 +5,7 @@ import 'package:nextseat/SeatRoutePage.dart';
 import 'package:nextseat/common/Scheme.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/common/utils/Utils.dart';
+import 'package:nextseat/data/db/SharedDb.dart';
 import 'package:nextseat/data/service/UdpService.dart';
 import 'package:nextseat/data/service/WebSocketService.dart';
 import 'package:nextseat/injection/injection.dart';
@@ -19,6 +20,13 @@ Future<void> main() async {
 
   // MARK: - 의존성 역전 셋팅
   await getItSetup();
+
+  await SharedDb().clear();
+  Log.d("초기화!!!!!!!!!");
+
+  // MARK: - 프리로드
+  await SharedDb().preloading();
+
 
   // MARK: - Udp 서비스 시작
   await UdpService().start();

@@ -31,13 +31,30 @@ class UserModel {
     );
   }
 
+  // Copy
+  UserModel copyWith({
+    String? id,
+    String? name,
+    String? number,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      number: number ?? this.number,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
       'number': number,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createdAt': createdAt.millisecondsSinceEpoch.toString(),
+      'updatedAt': updatedAt.millisecondsSinceEpoch.toString(),
     };
   }
 
@@ -45,8 +62,8 @@ class UserModel {
       : id = json['id'],
         name = json['name'],
         number = json['number'],
-        createdAt = DateTime.parse(json['createdAt']),
-        updatedAt = DateTime.parse(json['updatedAt']);
+        createdAt = DateTime.fromMillisecondsSinceEpoch(int.tryParse(json['createdAt'] ?? '0') ?? 0),
+        updatedAt = DateTime.fromMillisecondsSinceEpoch(int.tryParse(json['updatedAt'] ?? '0') ?? 0);
 
   @override
   String toString() {

@@ -1,31 +1,42 @@
 
 // MARK: - 공유 DB
+import 'dart:convert';
+
+import 'package:nextseat/common/utils/Log.dart';
+import 'package:nextseat/domain/model/UserModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedDb implements SharedDbImpl {
-  static const String _USER_NAME = 'user_name';  // 유저 이름
+  static const String _MY_INFO = 'my_info';  // 내 정보
 
   // MARK: - Key값을 미리 로드
   final Map<String, String?> _preloadingKeys = {};
 
   Future<void> preloading() async {
-    _preloadingKeys[_USER_NAME] = await getString(_USER_NAME);
+    _preloadingKeys[_MY_INFO] = await getString(_MY_INFO);
   }
 
-  // MARK: - 유저 이름 저장
-  Future<bool> putUserName({required String? name}) async {
-    if(name == null) {
-      _preloadingKeys.remove(_USER_NAME);
-      return await remove(_USER_NAME);
+  // MARK: - 내 정보 저장
+  Future<bool> putMyInfo({required UserModel user}) async {
+    _preloadingKeys[_MY_INFO] = user.toJson().toString();
+    return await putString(_MY_INFO, jsonEncode(user.toJson()));
+  }
+
+  // MARK: - 내 정보 조회
+  Future<UserModel> getMyInfo() async {
+    try {
+      final String? myInfoStr = await getString(_MY_INFO);
+      if (myInfoStr == null) {
+        UserModel empty = UserModel.empty();
+        await putMyInfo(user: empty);
+        return empty;
+      }
+
+      return UserModel.fromJson(jsonDecode(myInfoStr));
+    } catch(e, s) {
+      Log.e(e, s);
+      return UserModel.empty();
     }
-
-    _preloadingKeys[_USER_NAME] = name;
-    return await putString(_USER_NAME, name);
-  }
-
-  // MARK: - 유저 이름 조회
-  Future<String?> getUserName() async {
-    return await getString(_USER_NAME);
   }
 
   // MARK: - String 값 저장
