@@ -32,9 +32,7 @@ Future<void> main() async {
   await UdpService().start();
 
   // MARK: - WebSocket 서비스 시작
-  await WebSocketService().start(
-    port: PortContains.WEBSOCKET_PROT,
-  );
+  await WebSocketService().startMyServer();
 
   runApp(const SeatApp());
 }

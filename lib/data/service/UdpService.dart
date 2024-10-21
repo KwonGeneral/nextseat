@@ -102,13 +102,16 @@ class UdpService {
           }
 
           Log.d("[ UdpService: _receiveBroadcast ] * 브로드 캐스트 수신"
-          "\n내 아이피: $myIp"
+          "\n내 아이피: $myIp / 내 웹소켓 포트: ${PortContains.WEBSOCKET_PROT} / 타겟 웹소켓 포트: ${roomModel.webSocketPort}"
               "\n${roomModel.toJson()}");
 
           // 웹 소켓 연결
-          await WebSocketService().start(
-            port: int.tryParse(roomModel.webSocketPort) ?? PortContains.WEBSOCKET_PROT,
-          );
+          if(roomModel.hostAddress != null) {
+            await WebSocketService().startTargetServer(
+              ip: roomModel.hostAddress ?? '',
+              port: int.tryParse(roomModel.webSocketPort) ?? PortContains.WEBSOCKET_PROT,
+            );
+          }
         } catch(e, s) {
           Log.e(e, s);
         }
