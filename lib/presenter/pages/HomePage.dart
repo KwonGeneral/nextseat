@@ -74,13 +74,16 @@ class HomePage extends StatelessWidget {
                                   border: OutlineInputBorder(),
                                   hintText: Messages.get(LangKeys.inputMessage),
                                 ),
+                                controller: model.messageController,
                               ),
                             ),
                             SizedBox(
                               width: 8,
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await model.sendMessage();
+                              },
                               child: Text(Messages.get(LangKeys.send),),
                             ),
                           ],
@@ -120,26 +123,35 @@ class HomePageViewModel extends BaseViewModel {
   TextEditingController messageController = TextEditingController();
 
   // MARK: - 채팅 전송
-  void sendMessage() {
-    if (messageController.text.isEmpty) {
-      return;
-    }
+  Future<bool> sendMessage() async {
+    try {
+      if (messageController.text.isEmpty) {
+        return false;
+      }
 
-    // 채팅 전송
-    getIt<SendChatMessageUseCase>()(
-      message: messageController.text,
-    );
-
-    chatList.add(
-      ChatModel.empty(
-        roomId: roomInfo?.id ?? '',
-        userId: myInfo?.id ?? '',
+      // 채팅 전송
+      await getIt<SendChatMessageUseCase>()(
         message: messageController.text,
-        createdAt: DateTime.now(),
-      ),
-    );
+      );
 
-    messageController.clear();
+      chatList.add(
+        ChatModel.empty(
+          roomId: roomInfo?.id ?? '',
+          userId: myInfo?.id ?? '',
+          message: messageController.text,
+          createdAt: DateTime.now(),
+        ),
+      );
+
+      messageController.clear();
+
+      update();
+
+      return true;
+    } catch(e, s) {
+      Log.e(e, s);
+      return false;
+    }
   }
 
   // MARK: - 채팅 아이템 조회

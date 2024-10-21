@@ -107,7 +107,7 @@ class UdpService {
 
           // 웹 소켓 연결
           await WebSocketService().start(
-            port: roomModel.webSocketPort,
+            port: int.tryParse(roomModel.webSocketPort) ?? PortContains.WEBSOCKET_PROT,
           );
         } catch(e, s) {
           Log.e(e, s);

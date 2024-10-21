@@ -23,16 +23,6 @@ class WebSocketService {
 
   int currentPort = PortContains.WEBSOCKET_PROT;
 
-  // MARK: - WebSocket Service 시작
-  Future<void> start({required int port}) async {
-    Log.d("[ WebSocketService: start ] WebSocket Service 시작");
-
-    // 웹소켓 시작
-    await _startWebSocketServer(
-      port: port,
-    );
-  }
-
   // MARK: - WebSocket Service 종료
   Future<void> stop() async {
     Log.d("[ WebSocketService: stop ] WebSocket Service 종료");
@@ -49,8 +39,8 @@ class WebSocketService {
     _webSocket = null;
   }
 
-  Future<void> _startWebSocketServer({required int port}) async {
-    Log.d('[ WebSocketService: _startWebSocketServer] Starting WebSocket server');
+  // MARK: - WebSocket Service 시작
+  Future<void> start({required int port}) async {
     try {
       // 포트가 변경된 경우 서버를 종료하고 다시 시작
       if(port != currentPort) {
@@ -61,6 +51,8 @@ class WebSocketService {
       if(port == currentPort && _socketServer != null) {
         return;
       }
+
+      Log.d('[ WebSocketService: _startWebSocketServer] WebSocket Service 시작');
 
       _socketServer = await HttpServer.bind(InternetAddress.anyIPv4, port);
       Log.d('[ WebSocketService: _startWebSocketServer] WebSocket server started on port $port');
