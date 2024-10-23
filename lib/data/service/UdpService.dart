@@ -2,16 +2,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:nextseat/common/contains/PortContains.dart';
 import 'package:nextseat/common/utils/Log.dart';
-import 'package:nextseat/common/utils/Utils.dart';
-import 'package:nextseat/data/db/MemorialDb.dart';
-import 'package:nextseat/data/service/WebSocketService.dart';
-import 'package:nextseat/domain/model/RoomModel.dart';
-import 'package:nextseat/domain/usecase/chat/GetCurrentChatRoomUseCase.dart';
-import 'package:nextseat/domain/usecase/user/GetMyInfoUseCase.dart';
-import 'package:nextseat/injection/injection.dart';
+import 'package:nextseat/data/db/ChatDb.dart';
+import 'package:nextseat/domain/model/ChatModel.dart';
 import 'package:udp/udp.dart';
 
 // MARK: - Udp Service
@@ -75,7 +69,7 @@ class UdpService {
     // Udp 서버 시작
     try {
       _senderUdp = await UDP.bind(Endpoint.any(port: const Port(PortContains.UDP_SENDER_PORT))).timeout(const Duration(seconds: 10));
-      _receiverUdp = await UDP.bind(Endpoint.any(port: Port(PortContains.UDP_RECEIVER_PORT))).timeout(const Duration(seconds: 10));
+      _receiverUdp = await UDP.bind(Endpoint.any(port: const Port(PortContains.UDP_RECEIVER_PORT))).timeout(const Duration(seconds: 10));
     } catch(e, s) {
       Log.e(e, s);
     }
@@ -92,25 +86,14 @@ class UdpService {
     // 브로드 캐스트 수신
     _receiverUdp?.asStream().listen((Datagram? datagram) async {
       if(datagram != null) {
-        String data = utf8.decode(datagram.data);
-
         try {
-          final RoomModel roomModel = RoomModel.fromJson(json.decode(data));
-          String? myIp = await Utils.getIPAddress();
-          if(roomModel.hostAddress == myIp && myIp != null) {
-            return;
-          }
+          final data = utf8.decode(datagram.data);
+          final List<dynamic> jsonList = json.decode(data);
 
-          Log.d("[ UdpService: _receiveBroadcast ] * 브로드 캐스트 수신"
-          "\n내 아이피: $myIp / 내 웹소켓 포트: ${PortContains.WEBSOCKET_PROT} / 타겟 웹소켓 포트: ${roomModel.webSocketPort}"
-              "\n${roomModel.toJson()}");
+          List<ChatModel> chatList = ChatModel.fromJsonList(jsonList);
 
-          // 웹 소켓 연결
-          if(roomModel.hostAddress != null) {
-            await WebSocketService().startTargetServer(
-              ip: roomModel.hostAddress ?? '',
-              port: int.tryParse(roomModel.webSocketPort) ?? PortContains.WEBSOCKET_PROT,
-            );
+          for (var chat in chatList) {
+            await ChatDb().receiveChat(chat);
           }
         } catch(e, s) {
           Log.e(e, s);
@@ -121,7 +104,21 @@ class UdpService {
 
   // MARK: - 브로드 캐스트 전송
   Future<void> _sendBroadcast() async {
-    final data = utf8.encode(json.encode((await getIt<GetCurrentChatRoomUseCase>()()).toJson()));
-    _senderUdp?.send(data, Endpoint.broadcast(port: Port(PortContains.UDP_RECEIVER_PORT)));
+    // 채팅이 없으면 전송하지 않음
+    if(ChatDb().pendingChatList.isEmpty) {
+      return;
+    }
+
+    List<ChatModel> copyPendingChatList = ChatModel.copyList(ChatDb().pendingChatList);
+
+    final data = utf8.encode(json.encode(ChatModel.toJsonList(copyPendingChatList)));
+    int? result = await _senderUdp?.send(data, Endpoint.broadcast(port: const Port(PortContains.UDP_RECEIVER_PORT)));
+
+    if(result == -1 || result == null) {
+      Log.d("[ UdpService: _sendBroadcast ] 브로드 캐스트 전송 실패");
+    } else {
+      Log.d("[ UdpService: _sendBroadcast ] 브로드 캐스트 전송 성공");
+      ChatDb().completeSend(copyPendingChatList.map((e) => e.id).toList());
+    }
   }
 }

@@ -3,7 +3,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/domain/model/ChatModel.dart';
-import 'package:nextseat/domain/model/RoomModel.dart';
 import 'package:nextseat/domain/repository/ChatRepositoryImpl.dart';
 
 // MARK: - 채팅 목록 조회 UseCase
@@ -13,9 +12,21 @@ class GetChatMessageListUseCase {
 
   GetChatMessageListUseCase(this.chatRepository);
 
-  Future<List<ChatModel>> call() async {
+  List<ChatModel> call() {
     try {
-      return await chatRepository.getChatMessageList();
+      List<ChatModel> result = chatRepository.getChatMessageList();
+
+      // ID 중복 제거
+      List<ChatModel> tChatList = [];
+      for (ChatModel chat in result) {
+        if (tChatList.any((element) => element.id == chat.id)) {
+          continue;
+        }
+
+        tChatList.add(chat);
+      }
+
+      return tChatList;
     } catch(e, s) {
       Log.e(e, s);
       return [];

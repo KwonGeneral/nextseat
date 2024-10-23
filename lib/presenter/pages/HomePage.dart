@@ -6,10 +6,8 @@ import 'package:get/get.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/data/db/ChatDb.dart';
 import 'package:nextseat/domain/model/ChatModel.dart';
-import 'package:nextseat/domain/model/RoomModel.dart';
 import 'package:nextseat/domain/model/UserModel.dart';
 import 'package:nextseat/domain/usecase/chat/GetChatMessageListUseCase.dart';
-import 'package:nextseat/domain/usecase/chat/GetCurrentChatRoomUseCase.dart';
 import 'package:nextseat/domain/usecase/chat/SendChatMessageUseCase.dart';
 import 'package:nextseat/domain/usecase/user/GetMyInfoUseCase.dart';
 import 'package:nextseat/injection/injection.dart';
@@ -114,10 +112,7 @@ class HomePageViewModel extends BaseViewModel {
   UserModel? myInfo;
 
   // 채팅 목록
-  List<ChatModel> chatList = [];
-
-  // 채팅방 정보
-  RoomModel? roomInfo;
+  List<ChatModel> get chatList => getIt<GetChatMessageListUseCase>()();
 
   // 메세지
   TextEditingController messageController = TextEditingController();
@@ -132,15 +127,6 @@ class HomePageViewModel extends BaseViewModel {
       // 채팅 전송
       await getIt<SendChatMessageUseCase>()(
         message: messageController.text,
-      );
-
-      chatList.add(
-        ChatModel.empty(
-          roomId: roomInfo?.id ?? '',
-          userId: myInfo?.id ?? '',
-          message: messageController.text,
-          createdAt: DateTime.now(),
-        ),
       );
 
       messageController.clear();
@@ -169,9 +155,8 @@ class HomePageViewModel extends BaseViewModel {
   Future<void> dataUpdate() async {
     Log.d('HomePageViewModel dataUpdate');
 
-    chatList = await getIt<GetChatMessageListUseCase>()();
     myInfo = await getIt<GetMyInfoUseCase>()();
-    roomInfo = await getIt<GetCurrentChatRoomUseCase>()();
+
     update();
   }
 

@@ -3,12 +3,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:nextseat/SeatRoutePage.dart';
 import 'package:nextseat/common/Scheme.dart';
-import 'package:nextseat/common/contains/PortContains.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/common/utils/Utils.dart';
 import 'package:nextseat/data/db/SharedDb.dart';
 import 'package:nextseat/data/service/UdpService.dart';
-import 'package:nextseat/data/service/WebSocketService.dart';
 import 'package:nextseat/injection/injection.dart';
 import 'package:nextseat/presenter/lang/LangKeys.dart';
 import 'package:nextseat/presenter/lang/Messages.dart';
@@ -30,9 +28,6 @@ Future<void> main() async {
 
   // MARK: - Udp 서비스 시작
   await UdpService().start();
-
-  // MARK: - WebSocket 서비스 시작
-  await WebSocketService().startMyServer();
 
   runApp(const SeatApp());
 }
