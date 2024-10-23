@@ -28,4 +28,10 @@ class LangKeys {
 
   static const String inputMessage = 'input_message';
   static const String send = 'send';
+
+  static const String anonymous = '';
+
+  static const String nameAnonymous = 'name_anonymous';
+
+  static const String toSendAnonymous = 'to_send_anonymous';
 }

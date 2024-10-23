@@ -16,7 +16,6 @@ class SeatScaffold extends StatelessWidget {
   final bool isLoadingShow;
   final bool isParentTabBar;  // 탭바 여부 (true: 부모 탭바, false: 일반 페이지)
   final Widget? topWidget;  // 상단 위젯 (initLoading중에도 표시)
-  final bool isInitLoading;
 
   const SeatScaffold({
     super.key,
@@ -30,7 +29,6 @@ class SeatScaffold extends StatelessWidget {
     this.isLoadingShow = true,
     this.isParentTabBar = false,
     this.topWidget,
-    required this.isInitLoading,
   });
 
   @override
@@ -54,40 +52,6 @@ class SeatScaffold extends StatelessWidget {
                 child: body ?? Container(),
               ),
             ],
-          ),
-          bottomNavigationBar: bottomNavigationBar,
-          bottomSheet: bottomSheet,
-          backgroundColor:
-          backgroundColor ?? SeatThemes().background,
-          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-        ),
-      );
-    }
-
-    if(isInitLoading) {
-      return WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
-        child: Scaffold(
-          appBar: appBar,
-          body: SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              children: [
-                topWidget ?? Container(),
-                Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        SeatThemes().primary,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
           bottomNavigationBar: bottomNavigationBar,
           bottomSheet: bottomSheet,

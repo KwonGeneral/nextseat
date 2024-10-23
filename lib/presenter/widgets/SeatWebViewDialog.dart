@@ -58,7 +58,6 @@ class _KWebViewPage extends StatelessWidget {
         init: _KWebViewPageViewModel(),
         builder: (model) {
           return SeatScaffold(
-            isInitLoading: false,
             isLoadingShow: false,
             appBar: SeatAppBar(
               title: title,

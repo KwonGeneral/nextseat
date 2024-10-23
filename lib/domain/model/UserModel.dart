@@ -17,13 +17,14 @@ class UserModel {
 
   // Empty
   factory UserModel.empty({
+    String? id,
     String? name,
     String? number,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
     return UserModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id: id ?? DateTime.now().millisecondsSinceEpoch.toString(),
       name: name,
       number: number,
       createdAt: createdAt ?? DateTime.now(),

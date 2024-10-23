@@ -31,5 +31,11 @@ class Korean {
 
     LangKeys.inputMessage: '메세지를 입력하세요',
     LangKeys.send: '전송',
+
+    LangKeys.anonymous: '익명',
+
+    LangKeys.nameAnonymous: '번 익명이',
+
+    LangKeys.toSendAnonymous: '가 보냄',
   };
 }

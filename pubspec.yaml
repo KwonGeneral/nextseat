@@ -28,6 +28,7 @@ dependencies:
   chat_bubbles: ^1.6.0 # [MIT] 채팅 버블 패키지
   lottie: ^3.1.2 # [MIT] 로티 패키지
   network_info_plus: ^6.0.2 # [BSD-3-Clause] 네트워크 정보 패키지
+  flutter_chat_bubble: ^2.0.2 # [BSD-2-Clause] 채팅 버블 패키지
 
 dev_dependencies:
   flutter_test:

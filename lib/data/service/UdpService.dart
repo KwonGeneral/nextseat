@@ -92,6 +92,8 @@ class UdpService {
 
           List<ChatModel> chatList = ChatModel.fromJsonList(jsonList);
 
+          Log.d("[ UdpService: _startNsdService ] chatList: $chatList");
+
           for (var chat in chatList) {
             await ChatDb().receiveChat(chat);
           }
@@ -110,6 +112,8 @@ class UdpService {
     }
 
     List<ChatModel> copyPendingChatList = ChatModel.copyList(ChatDb().pendingChatList);
+
+    Log.d("[ UdpService: _sendBroadcast ] copyPendingChatList: $copyPendingChatList");
 
     final data = utf8.encode(json.encode(ChatModel.toJsonList(copyPendingChatList)));
     int? result = await _senderUdp?.send(data, Endpoint.broadcast(port: const Port(PortContains.UDP_RECEIVER_PORT)));

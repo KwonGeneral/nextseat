@@ -26,6 +26,9 @@ class GetChatMessageListUseCase {
         tChatList.add(chat);
       }
 
+      // 최신순 정렬
+      tChatList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
       return tChatList;
     } catch(e, s) {
       Log.e(e, s);
