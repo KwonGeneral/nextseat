@@ -12,11 +12,10 @@ class UpdateMyInfoUseCase {
 
   UpdateMyInfoUseCase(this.userRepository);
 
-  Future<UserModel?> call({required String? name, required String? number}) async {
+  Future<UserModel?> call({required UserModel myInfo}) async {
     try {
       return await userRepository.updateMyInfo(
-        name: name,
-        number: number,
+        myInfo: myInfo,
       );
     } catch(e, s) {
       Log.e(e, s);

@@ -37,5 +37,8 @@ class Korean {
     LangKeys.nameAnonymous: '번 익명이',
 
     LangKeys.toSendAnonymous: '가 보냄',
+
+    LangKeys.newUserEnter: '님이 입장하셨습니다.',
+    LangKeys.userExit: '님이 퇴장하셨습니다.',
   };
 }

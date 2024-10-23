@@ -10,35 +10,11 @@ import 'package:nextseat/domain/repository/UserRepositoryImpl.dart';
 // MARK: - 유저 Repository
 @Singleton(as: UserRepositoryImpl, env: [Env.DEV, Env.DEPLOY])
 class UserRepository implements UserRepositoryImpl {
-  UserModel? _myInfo;
-
-  // MARK: - 유저 생성
-  @override
-  Future<UserModel> createUser({required String? name, required String? number}) async {
-    try {
-      _myInfo = UserModel.empty(
-        name: name ?? '',
-        number: number ?? '',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
-
-      await SharedDb().putMyInfo(user: _myInfo ?? UserModel.empty());
-
-      return _myInfo ?? UserModel.empty();
-    } catch (e, s) {
-      Log.e(e, s);
-      rethrow;
-    }
-  }
-
   // MARK: - 내 정보 조회
   @override
   Future<UserModel> getMyInfo() async {
     try {
-      _myInfo = await SharedDb().getMyInfo();
-
-      return _myInfo ?? UserModel.empty();
+      return await SharedDb().getMyInfo();
     } catch (e, s) {
       Log.e(e, s);
       rethrow;
@@ -47,18 +23,18 @@ class UserRepository implements UserRepositoryImpl {
 
   // MARK: - 내 정보 수정
   @override
-  Future<UserModel> updateMyInfo({required String? name, required String? number}) async {
+  Future<UserModel> updateMyInfo({required UserModel myInfo}) async {
     try {
-      _myInfo = UserModel.empty(
-        name: name ?? '',
-        number: number ?? '',
-        createdAt: _myInfo?.createdAt ?? DateTime.now(),
+      UserModel tempMyInfo = myInfo.copyWith(
+        name: myInfo.name ?? '',
+        number: myInfo.number ?? '',
+        createdAt: myInfo.createdAt,
         updatedAt: DateTime.now(),
       );
 
-      await SharedDb().putMyInfo(user: _myInfo ?? UserModel.empty());
+      await SharedDb().putMyInfo(user: tempMyInfo);
 
-      return _myInfo ?? UserModel.empty();
+      return tempMyInfo;
     } catch (e, s) {
       Log.e(e, s);
       rethrow;

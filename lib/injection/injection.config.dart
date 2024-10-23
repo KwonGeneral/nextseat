@@ -18,7 +18,6 @@ import 'package:nextseat/domain/usecase/chat/GetChatMessageListUseCase.dart'
     as _i140;
 import 'package:nextseat/domain/usecase/chat/SendChatMessageUseCase.dart'
     as _i928;
-import 'package:nextseat/domain/usecase/user/CreateUserUseCase.dart' as _i321;
 import 'package:nextseat/domain/usecase/user/GetMyInfoUseCase.dart' as _i619;
 import 'package:nextseat/domain/usecase/user/UpdateMyInfoUseCase.dart' as _i47;
 
@@ -50,8 +49,6 @@ extension GetItInjectableX on _i174.GetIt {
         _deploy,
       },
     );
-    gh.singleton<_i321.CreateUserUseCase>(
-        () => _i321.CreateUserUseCase(gh<_i37.UserRepositoryImpl>()));
     gh.singleton<_i619.GetMyInfoUseCase>(
         () => _i619.GetMyInfoUseCase(gh<_i37.UserRepositoryImpl>()));
     gh.singleton<_i47.UpdateMyInfoUseCase>(

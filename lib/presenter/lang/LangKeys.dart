@@ -34,4 +34,7 @@ class LangKeys {
   static const String nameAnonymous = 'name_anonymous';
 
   static const String toSendAnonymous = 'to_send_anonymous';
+
+  static const String newUserEnter = 'new_user_enter';
+  static const String userExit = 'user_exit';
 }

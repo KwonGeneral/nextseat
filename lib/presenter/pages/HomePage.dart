@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nextseat/common/types/ChatTypes.dart';
 import 'package:nextseat/common/utils/DateTimeUtils.dart';
 import 'package:nextseat/common/utils/Log.dart';
 import 'package:nextseat/data/db/ChatDb.dart';
@@ -58,7 +59,6 @@ class HomePage extends StatelessWidget {
                                 top: 16,
                                 bottom: 4,
                               ),
-
                               child: CustomScrollView(
                                 controller: model.scrollController,
                                 reverse: true,
@@ -68,16 +68,52 @@ class HomePage extends StatelessWidget {
                                           (context, index) {
                                         if (index >= model.chatList.length) return null;
 
-                                        return ChatMessageWidget(
-                                          message: model.getChatItem(index),
-                                          isMy: model.getChatItem(index).userId == model.myInfo?.id,
-                                          showTimeStamp: _shouldShowTimestamp(
-                                            model: model,
-                                            currentIndex: index,
+                                        final chat = model.getChatItem(index);
+
+                                        // MARK: - 고유한 키 생성
+                                        final itemKey = ValueKey('${chat.type}_${chat.id}_${chat.createdAt.millisecondsSinceEpoch}');
+
+                                        // MARK: - 시스템 메세지(입장)
+                                        if (chat.type == ChatTypes.SYSTEM) {
+                                          return KeyedSubtree(
+                                            key: itemKey,
+                                            child: SystemMessageWidget(
+                                              message: chat.message,
+                                            ),
+                                          );
+                                        }
+
+                                        // MARK: - 날짜 메세지
+                                        if (chat.type == ChatTypes.DATE) {
+                                          // 이전 메시지와 날짜가 같으면 날짜 위젯을 그리지 않음
+                                          if (index < model.chatList.length - 1) {
+                                            final prevChat = model.getChatItem(index + 1);
+                                            if (_isSameDay(chat.createdAt, prevChat.createdAt)) {
+                                              return const SizedBox.shrink();
+                                            }
+                                          }
+
+                                          return KeyedSubtree(
+                                            key: itemKey,
+                                            child: DateTimeMessageWidget(
+                                              message: chat.message,
+                                            ),
+                                          );
+                                        }
+
+                                        // MARK: - 채팅 메세지
+                                        return KeyedSubtree(
+                                          key: itemKey,
+                                          child: ChatMessageWidget(
+                                            message: chat,
+                                            isMy: chat.userId == model.myInfo?.id,
+                                            showTimeStamp: _shouldShowTimestamp(
+                                              model: model,
+                                              currentIndex: index,
+                                            ),
                                           ),
                                         );
                                       },
-
                                       childCount: model.chatList.length,
                                     ),
                                   ),
@@ -112,7 +148,7 @@ class HomePage extends StatelessWidget {
   }) {
     final currentMessage = model.getChatItem(currentIndex);
 
-    // 첫 번째 메시지는 항상 타임스탬프 표시
+    // 첫 번째 메세지는 항상 타임스탬프 표시
     if (currentIndex == 0) return true;
 
     final previousMessage = model.getChatItem(currentIndex - 1);
@@ -120,7 +156,7 @@ class HomePage extends StatelessWidget {
     // 발신자가 다른 경우 타임스탬프 표시
     if (currentMessage.userId != previousMessage.userId) return true;
 
-    // 같은 시간대(HH:mm)의 메시지인지 확인
+    // 같은 시간대(HH:mm)의 메세지인지 확인
     final currentTimestamp = DateTimeUtils.chatViewDateTime(currentMessage.createdAt);
     final previousTimestamp = DateTimeUtils.chatViewDateTime(previousMessage.createdAt);
 
@@ -135,9 +171,78 @@ class HomePage extends StatelessWidget {
   }) {
     FocusScope.of(context).unfocus();
   }
+
+  // MARK: - 같은 날짜인지 확인하는 헬퍼 메서드
+  bool _isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
 }
 
-// MARK: - 채팅 메시지 위젯
+// MARK: - 날짜 메세지 위젯
+class DateTimeMessageWidget extends StatelessWidget {
+  final String message;
+
+  const DateTimeMessageWidget({
+    super.key,
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Center(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(1000),
+          child: Container(
+            color: SeatThemes().black30,
+            padding: EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 8,
+            ),
+            child: Text(
+              message,
+              style: TextStyles.regular(
+                fontSize: 12,
+                color: SeatThemes().surface01,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// MARK: - 시스템 메세지 위젯
+class SystemMessageWidget extends StatelessWidget {
+  final String message;
+
+  const SystemMessageWidget({
+    super.key,
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8),
+      child: Center(
+        child: Text(
+          message,
+          style: TextStyles.regular(
+            fontSize: 12,
+            color: SeatThemes().black40,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// MARK: - 채팅 메세지 위젯
 class ChatMessageWidget extends StatelessWidget {
   final ChatModel message;
   final bool isMy;
@@ -167,6 +272,8 @@ class ChatMessageWidget extends StatelessWidget {
               fontSize: 14,
               color: SeatThemes().surface01,
             ),
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
           ),
           if (showTimeStamp) ...[
             const SizedBox(height: 2),
