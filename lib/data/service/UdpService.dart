@@ -84,13 +84,13 @@ class UdpService {
     }
 
     // 채팅 전송 Job 시작
-    _sendChatJob = Timer.periodic(const Duration(seconds: 3), (_) async {
+    _sendChatJob = Timer.periodic(const Duration(seconds: 1), (_) async {
       // 브로드 캐스트 전송
       await _sendBroadcastChat();
     });
 
     // 유저 전송 Job 시작
-    _sendUserJob = Timer.periodic(const Duration(seconds: 5), (_) async {
+    _sendUserJob = Timer.periodic(const Duration(seconds: 1), (_) async {
       // 브로드 캐스트 전송
       await _sendBroadcastUser();
     });
