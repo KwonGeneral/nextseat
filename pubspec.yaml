@@ -38,6 +38,15 @@ dev_dependencies:
   build: ^2.4.1 # [BSD-3-Clause] 빌드 패키지
   glob: ^2.1.2 # [BSD-3-Clause] 파일 패키지
   build_runner: ^2.4.9 # [BSD-3-Clause] 빌드 러너 패키지
+  icons_launcher: ^3.0.0 # [MIT] 아이콘 패키지
+
+icons_launcher:
+  image_path: "assets/images/background_logo.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
 
 flutter:
   fonts:
