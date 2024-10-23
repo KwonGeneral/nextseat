@@ -128,7 +128,6 @@ class HomePage extends StatelessWidget {
                   ChatInputWidget(
                     controller: model.messageController,
                     onSend: () async {
-                      _unFocus(context: context, model: model);
                       await model.sendMessage();
                     },
                   ),

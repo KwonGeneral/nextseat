@@ -1,4 +1,6 @@
 
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -72,13 +74,44 @@ class UdpService {
 
     // Udp 서버 시작
     try {
-      // 채팅 UDP
-      _senderChatUdp = await UDP.bind(Endpoint.any(port: const Port(PortContains.UDP_SENDER_PORT))).timeout(const Duration(seconds: 10));
-      _receiverChatUdp = await UDP.bind(Endpoint.any(port: const Port(PortContains.UDP_CHAT_RECEIVER_PORT))).timeout(const Duration(seconds: 10));
+      // 바인딩 전에 포트가 사용 가능한지 확인
+      if (!await _isPortAvailable(PortContains.UDP_SENDER_CHAT_PORT) || !await _isPortAvailable(PortContains.UDP_CHAT_RECEIVER_PORT) ||
+          !await _isPortAvailable(PortContains.UDP_SENDER_USER_PORT) || !await _isPortAvailable(PortContains.UDP_CHAT_USER_RECEIVER_PORT)) {
+        Log.d("[ UdpService: _startNsdService ] 포트 사용 불가");
+        return;
+      }
 
-      // 유저 UDP
-      _senderUserUdp = await UDP.bind(Endpoint.any(port: const Port(PortContains.UDP_SENDER_PORT))).timeout(const Duration(seconds: 10));
-      _receiverUserUdp = await UDP.bind(Endpoint.any(port: const Port(PortContains.UDP_CHAT_USER_RECEIVER_PORT))).timeout(const Duration(seconds: 10));
+      // 명시적인 IP 주소 바인딩 추가
+      final interfaces = await NetworkInterface.list();
+      final wifiInterface = interfaces.firstWhere(
+            (interface) => interface.name.toLowerCase().contains('wlan') ||
+            interface.name.toLowerCase().contains('wifi'),
+        orElse: () => interfaces.first,
+      );
+
+      // 1. 채팅 UDP 설정
+      _senderChatUdp = await UDP.bind(
+        Endpoint.any(), // 송신용은 any로 시스템이 자동 할당
+      ).timeout(const Duration(seconds: 1));
+
+      _receiverChatUdp = await UDP.bind(
+        Endpoint.unicast(
+            InternetAddress.anyIPv4,
+            port: Port(PortContains.UDP_CHAT_RECEIVER_PORT)
+        ),
+      ).timeout(const Duration(seconds: 1));
+
+      // 2. 유저 UDP 설정
+      _senderUserUdp = await UDP.bind(
+        Endpoint.any(), // 송신용은 any로 시스템이 자동 할당
+      ).timeout(const Duration(seconds: 1));
+
+      _receiverUserUdp = await UDP.bind(
+        Endpoint.unicast(
+            InternetAddress.anyIPv4,
+            port: Port(PortContains.UDP_CHAT_USER_RECEIVER_PORT)
+        ),
+      ).timeout(const Duration(seconds: 1));
     } catch(e, s) {
       Log.e(e, s);
     }
@@ -194,6 +227,17 @@ class UdpService {
       } catch(e, s) {
         Log.e(e, s);
       }
+    }
+  }
+
+  // MARK: - 포트 사용 가능 여부 체크
+  Future<bool> _isPortAvailable(int port) async {
+    try {
+      final socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
+      socket.close();
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }
