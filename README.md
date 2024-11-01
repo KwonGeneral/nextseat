@@ -1,16 +1,4 @@
-# nextseat
+"옆자리" - 같은 와이파이, 다른 이야기
+당신 옆 누군가와 익명으로 대화하세요. 와이파이로 연결된 공간에서만 나누는 비밀 채팅앱. 완벽한 익명성, 데이터 무저장으로 안전하게. 지금 옆자리엔 어떤 이야기가 숨어있을까요?
 
-같은 와이파이, 다른 이야기
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<div align="center"> <img src="readme/0.png" alt="옆자리 앱 소개 이미지" width="400"/> <img src="readme/1.png" alt="옆자리 앱 추가 이미지" width="400"/> </div>
